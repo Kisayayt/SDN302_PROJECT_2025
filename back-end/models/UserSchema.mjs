@@ -35,6 +35,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    employee_role: {
+      type: String,
+      required: true,
+    },
     department_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Department",
