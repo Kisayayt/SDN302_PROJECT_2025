@@ -11,7 +11,12 @@ const port = process.env.PORT;
 connect();
 app.use(express.json());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(rootRouter);
 app.use(function (req, res, next) {
   res
