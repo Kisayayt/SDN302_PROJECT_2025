@@ -4,24 +4,30 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
-function Login({ setAuth }) {
+function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+      return;
+    }
+  });
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        "http://localhost:9999/auth/login",
-        { username, password },
-        { withCredentials: true } // 🔹 Quan trọng! Để gửi cookie từ backend
-      );
-      console.log(res.data);
+      const res = await axios.post("http://localhost:9999/auth/login", {
+        username,
+        password,
+      });
+      localStorage.setItem("token", res.data.token);
 
-      setAuth(true);
       navigate("/dashboard");
     } catch (err) {
       setError("username or password is incorrect");

@@ -74,15 +74,10 @@ export const Login = async (req, res) => {
       }
     );
     console.log(token);
-    res.cookie("token", token, {
-      httpOnly: true, // Chặn truy cập từ JavaScript
-      secure: true, // Chỉ dùng HTTPS
-      sameSite: "Strict", // Chống CSRF
-      maxAge: 3600000, // Hết hạn sau 1h
-    });
 
     res.json({
       message: "Login successful",
+      token,
       user: { id: user._id, role: user.role },
     });
   } catch (e) {
