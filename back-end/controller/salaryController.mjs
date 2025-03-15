@@ -65,3 +65,29 @@ export const deleteSalary = async (req, res) => {
         res.status(500).json({ message: e.message });
     }
 }
+
+export const createSalary = async (req, res) => {
+    try {
+        console.log(req.body);
+
+    const {
+        level_name,
+        salary_coefficient,
+        monthly_salary,
+        daily_salary,
+      
+    } = req.body;
+
+    let salary = new SalaryLevelModel({
+        level_name,
+        salary_coefficient,
+        monthly_salary,
+        daily_salary,
+    });
+
+    await salary.save();
+    res.status(201).json({ message: "User created successfully", salary });
+    } catch (e) {
+        res.status(500).json({ message: e.message });
+    }
+}
