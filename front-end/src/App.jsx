@@ -10,6 +10,7 @@ import theme from "./helper/theme";
 
 import "./index.css";
 import { ThemeProvider } from "@mui/material";
+import AdminDepartmentManaging from "./modules/admin.modules/department.managing/AdminDepartmentManaging";
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route
+              path="/admin/departments"
+              element={<AdminDepartmentManaging />}
+            />
           </Route>
         </Routes>
       </BrowserRouter>

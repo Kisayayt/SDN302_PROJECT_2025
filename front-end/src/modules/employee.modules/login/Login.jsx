@@ -3,11 +3,13 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import PasswordIcon from "@mui/icons-material/Password";
 import {
   Alert,
   Box,
   Button,
   Container,
+  InputAdornment,
   Snackbar,
   TextField,
   Typography,
@@ -16,6 +18,7 @@ import {
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import AccountCircle from "@mui/icons-material/AccountCircle";
 
 import PersonalVideoOutlinedIcon from "@mui/icons-material/PersonalVideoOutlined";
 
@@ -112,6 +115,15 @@ function Login() {
               error={!!errors.username}
               helperText={errors.username?.message}
               required
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <AccountCircle />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -123,6 +135,15 @@ function Login() {
               error={!!errors.password}
               helperText={errors.password?.message}
               required
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <PasswordIcon />
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
             <Button
               fullWidth

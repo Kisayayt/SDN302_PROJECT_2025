@@ -9,7 +9,7 @@ function EmployeeLayout() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      navigate("/login"); // Nếu không có token, chuyển đến trang login
+      navigate("/login");
     }
   }, [navigate]);
   return (

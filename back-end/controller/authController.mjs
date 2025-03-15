@@ -3,47 +3,58 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-  const {
-    username,
-    password,
-    role,
-    name,
-    email,
-    phone_number,
-    gender,
-    employee_role,
-    department_id,
-    salary_level_id,
-  } = req.body;
-  let user = await UserModel.findOne({ email });
-  let usernameExist = await UserModel.findOne({ username });
-  if (usernameExist) {
-    return res.status(400).json({ message: "Username already exists" });
-  }
-
-  if (user) {
-    return res.status(400).json({ message: "Email user already exists" });
-  }
-
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  user = new UserModel({
-    username,
-    password: hashedPassword,
-    role,
-    name,
-    email,
-    phone_number,
-    gender,
-    employee_role,
-    department_id,
-    salary_level_id,
-  });
-
-  await user.save();
-  res.status(201).json({ message: "User created successfully", user: user });
   try {
+    console.log(req.body);
+
+    const {
+      username,
+      password,
+      role,
+      name,
+      email,
+      phone_number,
+      gender,
+      employee_role,
+      department_id,
+      salary_level_id,
+    } = req.body;
+
+    // Kiểm tra nếu thiếu password
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
+    let user = await UserModel.findOne({ email });
+    let usernameExist = await UserModel.findOne({ username });
+
+    if (usernameExist) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
+
+    if (user) {
+      return res.status(400).json({ message: "Email user already exists" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user = new UserModel({
+      username,
+      password: hashedPassword,
+      role,
+      name,
+      email,
+      phone_number,
+      gender,
+      employee_role,
+      department_id,
+      salary_level_id,
+    });
+
+    await user.save();
+    res.status(201).json({ message: "User created successfully", user });
   } catch (e) {
+    console.error(e);
     res.status(500).json({ message: e.message });
   }
 };
