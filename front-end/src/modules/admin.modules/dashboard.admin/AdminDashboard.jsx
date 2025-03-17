@@ -2,9 +2,15 @@ import {
   Box,
   Container,
   Typography,
-  List,
-  ListItem,
-  ListItemText,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
 } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
@@ -15,9 +21,12 @@ import axios from "axios";
 
 function AdminDashboard() {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]); // State để lưu danh sách người dùng
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [currentPage, setCurrentPage] = useState(0); // Bắt đầu từ 0 để tương thích với TablePagination
+  const [totalPages, setTotalPages] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Số user mỗi trang
 
   console.log("Admin Dashboard loaded");
 
@@ -45,25 +54,36 @@ function AdminDashboard() {
     }
   }, [navigate]);
 
-  // Gọi API lấy danh sách người dùng
+  // Fetch danh sách users
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/users");
-        setUsers(response.data); // Lưu danh sách user vào state
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách user:", error);
+        setLoading(true);
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(
+          `http://localhost:9999/users/get-all-users?page=${
+            currentPage + 1
+          }&limit=${rowsPerPage}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+
+        setUsers(response.data.users);
+        setTotalPages(response.data.totalPages);
+        setLoading(false);
+      } catch (err) {
         setError("Không thể tải danh sách người dùng");
-      } finally {
         setLoading(false);
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [currentPage, rowsPerPage]); // Gọi lại API khi currentPage hoặc rowsPerPage thay đổi
 
   return (
-    <Container>
+    <Container sx={{ mb: 5 }}>
       <Typography variant="h4" sx={{ fontWeight: "bold", mt: 5, mb: 3 }}>
         Trang chủ
       </Typography>
@@ -72,28 +92,53 @@ function AdminDashboard() {
           <SideBar />
         </Grid2>
         <Grid2 item xs={12} md={9}>
-          <Box sx={{ bgcolor: "blue", height: "100px", mb: 3 }}>Item-2</Box>
+          {/* Hiển thị danh sách user bằng Table */}
+          <TableContainer component={Paper} sx={{ mt: 2 }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <strong>Tên</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Giới tính</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Email</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Phone</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {users.map((user) => (
+                  <TableRow key={user._id}>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>
+                      {user.gender === "male" ? "Nam" : "Nữ"}
+                    </TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.phone_number}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-          {/* Hiển thị danh sách user */}
-          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2 }}>
-            Danh sách người dùng
-          </Typography>
-          {loading ? (
-            <Typography>Đang tải...</Typography>
-          ) : error ? (
-            <Typography color="error">{error}</Typography>
-          ) : (
-            <List>
-              {users.map((user) => (
-                <ListItem
-                  key={user._id}
-                  sx={{ borderBottom: "1px solid #ddd" }}
-                >
-                  <ListItemText primary={`${user.name} - ${user.email}`} />
-                </ListItem>
-              ))}
-            </List>
-          )}
+          {/* Pagination */}
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={totalPages * rowsPerPage}
+            rowsPerPage={rowsPerPage}
+            page={currentPage}
+            onPageChange={(event, newPage) => setCurrentPage(newPage)}
+            onRowsPerPageChange={(event) => {
+              setRowsPerPage(parseInt(event.target.value, 10));
+              setCurrentPage(0);
+            }}
+          />
         </Grid2>
       </Grid2>
     </Container>
