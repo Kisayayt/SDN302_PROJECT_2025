@@ -38,7 +38,7 @@ export const addUsers = async (req, res) => {
 
     const existingUser = await UserModel.findOne({ $or: [{ username }, { email }] });
     if (existingUser) {
-      return res.status(400).json({ message: "Username hoặc Em đã tồn tại!" });
+      return res.status(400).json({ message: "Username hoặc Email đã tồn tại!" });
     }
 
     const saltRounds = 10;
