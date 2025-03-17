@@ -39,7 +39,7 @@ function AdminDashboard() {
         navigate("/login");
       }
     } catch (error) {
-      console.error("Invalid token:", error);
+      console.error("Invalid tokennn:", error);
       localStorage.removeItem("token");
       navigate("/login");
     }
