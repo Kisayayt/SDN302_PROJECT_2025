@@ -15,10 +15,6 @@ const UserAttendanceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    overtimeHours: {
-      type: Number,
-      default: 0,
-    },
   },
   {
     timestamps: true,

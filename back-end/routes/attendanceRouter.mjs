@@ -1,5 +1,8 @@
 import express from "express";
-import { getAttendance, getOneAtten } from "../controller/attendanceController.mjs";
+import {
+  getAttendance,
+  getOneAtten,
+} from "../controller/attendanceController.mjs";
 
 const attendanceRouter = express.Router();
 
