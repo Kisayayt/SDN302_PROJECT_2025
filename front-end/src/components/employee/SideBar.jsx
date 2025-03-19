@@ -22,7 +22,12 @@ const Sidebar = () => {
       path: "/admin/dashboard",
       icon: <PeopleAltIcon />,
       label: "Quản lí người dùng",
-      match: ["/users/dashboard", "/users/search", "/userDetails"],
+      match: [
+        "/users/dashboard",
+        "/users/search",
+        "/userDetails",
+        "/admin/users/create",
+      ],
     },
     {
       path: "/admin/departments",
@@ -46,35 +51,35 @@ const Sidebar = () => {
       ],
     },
     {
-      path: "/salaryLevels",
+      path: "/admin/salaryLevels",
       icon: <CurrencyExchangeIcon />,
       label: "Quản lí bậc lương",
-      match: ["/salaryLevels"],
+      match: ["/admin/salaryLevels"],
     },
-    {
-      path: "/payrolls",
-      icon: <WalletIcon />,
-      label: "Quản lí trả lương",
-      match: ["/payrolls"],
-    },
-    {
-      path: "/admin/workTime",
-      icon: <AccessAlarmIcon />,
-      label: "Đổi thời gian làm việc",
-      match: ["/admin/workTime"],
-    },
-    {
-      path: "/reasons",
-      icon: <ReceiptIcon />,
-      label: "Quản lý các lý do",
-      match: ["/reasons"],
-    },
-    {
-      path: "/chart",
-      icon: <BarChartIcon />,
-      label: "Bảng tổng quan",
-      match: ["/chart"],
-    },
+    // {
+    //   path: "/payrolls",
+    //   icon: <WalletIcon />,
+    //   label: "Quản lí trả lương",
+    //   match: ["/payrolls"],
+    // },
+    // {
+    //   path: "/admin/workTime",
+    //   icon: <AccessAlarmIcon />,
+    //   label: "Đổi thời gian làm việc",
+    //   match: ["/admin/workTime"],
+    // },
+    // {
+    //   path: "/reasons",
+    //   icon: <ReceiptIcon />,
+    //   label: "Quản lý các lý do",
+    //   match: ["/reasons"],
+    // },
+    // {
+    //   path: "/chart",
+    //   icon: <BarChartIcon />,
+    //   label: "Bảng tổng quan",
+    //   match: ["/chart"],
+    // },
   ];
 
   // Xác định item nào active

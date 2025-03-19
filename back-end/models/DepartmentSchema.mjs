@@ -20,6 +20,21 @@ const DepartmentSchema = new mongoose.Schema(
   }
 );
 
+DepartmentSchema.virtual("users", {
+  ref: "User",
+  localField: "_id",
+  foreignField: "department_id",
+});
+
+DepartmentSchema.virtual("children", {
+  ref: "Department",
+  localField: "_id",
+  foreignField: "parent_id",
+});
+
+DepartmentSchema.set("toObject", { virtuals: true });
+DepartmentSchema.set("toJSON", { virtuals: true });
+
 const DepartmentModel = mongoose.model(
   "Department",
   DepartmentSchema,
